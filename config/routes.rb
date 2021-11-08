@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :posts
+    # routes to correct destination
     get '/Posts/:tags/:sortBy/:direction', to: 'posts#get_posts', as: 'Posts'
     get '/Posts/:tags', to: 'posts#get_post_by_one_tag'
   end

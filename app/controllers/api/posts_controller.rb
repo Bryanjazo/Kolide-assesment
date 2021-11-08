@@ -11,9 +11,11 @@ class Api::PostsController < ApplicationController
     # validates the sort paramaters to check if its included or not
     sortByValues = ["id","author","authorId","likes","popularity","reads","tags"]
     directionValues = ["asc", "desc"]
+
+    # Seperating the fetch method in order to keep seperation of concerns 
     response = Api::Post.fetch_posts(tags, sortBy, direction)
     
-
+    # caching in all of the posts for 60 minutes
     Rails.cache.fetch("{#cache_key_with_version}/
       get_posts", expries_in: 60.minutes) do 
       Api::Post.fetch_posts(tags, sortBy, direction)
@@ -21,13 +23,14 @@ class Api::PostsController < ApplicationController
 
   
 
-    
+    # conditional that checks if the params sort includes one of the words in the array
     if !sortByValues.include?(sortBy)
       render json: {
         status: 400,
         error: "sortBy parameter is invalid"
       }
     end
+    # conditional that checks if the params direction includes one of the words in the array
     if !directionValues.include?(direction)
       render json: {
         status: 400,
@@ -35,7 +38,7 @@ class Api::PostsController < ApplicationController
       }
     end
 
-  
+  # return response
   if response.code === 200
     render json: response
   elsif response.code === 400
