@@ -1,24 +1,12 @@
-# README
+How to start server 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```rails s```
 
-Things you may want to cover:
+To test this Api out you can go ahead and try the example Url's
 
-* Ruby version
+```http://localhost:3000/api/Posts/history,tech/likes/asc```
 
-* System dependencies
+Without extra params
 
-* Configuration
+```http://localhost:3000/api/Posts/history,tech```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
