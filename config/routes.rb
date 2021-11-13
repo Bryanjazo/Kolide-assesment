@@ -2,12 +2,12 @@ Rails.application.routes.draw do
   namespace :api do
     resources :posts
     # routes to correct destination
-    get '/Posts/:tags/:sortBy/:direction', to: 'posts#get_posts', as: 'Posts'
-    get '/Posts/:tags', to: 'posts#get_post_by_one_tag'
+    get '/posts/:tags/:sortBy/:direction', to: 'posts#get_posts', as: 'Posts'
+    get '/posts/:tags', to: 'posts#get_post_by_one_tag'
   end
   namespace :api do
     resources :pings
-    get '/Ping', to: 'pings#get_ping', as: 'Ping' 
+    get '/ping', to: 'pings#get_ping', as: 'Ping' 
   end
 
   

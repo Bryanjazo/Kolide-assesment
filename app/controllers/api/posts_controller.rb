@@ -8,6 +8,7 @@ class Api::PostsController < ApplicationController
     sortBy = params[:sortBy]
     direction = params[:direction]
 
+
     # validates the sort paramaters to check if its included or not
     sortByValues = ["id","author","authorId","likes","popularity","reads","tags"]
     directionValues = ["asc", "desc"]
@@ -21,28 +22,35 @@ class Api::PostsController < ApplicationController
       Api::Post.fetch_posts(tags, sortBy, direction)
     end
 
+
+    if tags === ' ' 
+      return render json: {
+        status: 400,
+        error: "Tag paramater must be valid"
+      }
+    end
   
 
     # conditional that checks if the params sort includes one of the words in the array
     if !sortByValues.include?(sortBy)
-      render json: {
+     return render json: {
         status: 400,
         error: "sortBy parameter is invalid"
       }
+   
     end
+
     # conditional that checks if the params direction includes one of the words in the array
-    if !directionValues.include?(direction)
-      render json: {
-        status: 400,
-        error: "sortBy parameter is invalid"
-      }
-    end
+   if !directionValues.include?(direction)
+    return render json: {
+      status: 400,
+      error: "sortBy parameter is invalid"
+    }
+  end
 
   # return response
   if response.code === 200
-    render json: response
-  elsif response.code === 400
-    render json: response
+    return render json: response
   end
   
 end
@@ -50,11 +58,13 @@ end
 # Single tag search only not using other queries can be called with multiple tags.
 
 def get_post_by_one_tag
+
   # Finding tag paramaters 
   tags = params[:tags]
   # Making a call to a instance method in the models section to fetch the correct data
+  
   response = Api::Post.fetch_posts_by_tag_only(tags)
-
+  
   # Caching search for a time length of 60 minutes 
   Rails.cache.fetch("{#cache_key_with_version}/
     get_post_by_one_tag", expries_in: 60.minutes) do 
@@ -64,10 +74,8 @@ def get_post_by_one_tag
   # if the response is 200/correct render posts
   if response.code === 200 
     render json: response
-  else
-    render json: {
-      error: 'Tags parameter is required'
-    }
+ 
+  
   end
 
 end
